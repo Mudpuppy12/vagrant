@@ -1,0 +1,43 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "log" do |log|
+    log.vm.box = "centos/7"
+    log.vm.hostname = "log-sandbox.internal.lan"
+    log.vm.network :private_network, ip: "192.169.100.73"
+
+    log.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--name", "log"]
+    end
+  end
+
+config.vm.define "splunk" do |splunk|
+    splunk.vm.box = "centos/7"
+    splunk.vm.hostname = 'splunk-sandbox.internal.lan'
+
+    splunk.vm.network :private_network, ip: "192.169.100.75"
+    splunk.vm.network "forwarded_port", guest:8080, host:8080
+    splunk.vm.network "forwarded_port", guest:8000, host:8000
+
+    splunk.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 2048]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--name", "splunk"]
+    end
+  end
+
+
+  config.vm.define "statsd" do |statsd|
+    statsd.vm.box = "centos/7"
+    statsd.vm.hostname = 'statsd-standbox.internal.lan'
+    
+    statsd.vm.network :private_network, ip: "192.169.100.74"
+
+    statsd.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--name", "statsd"]
+    end
+  end
+end
