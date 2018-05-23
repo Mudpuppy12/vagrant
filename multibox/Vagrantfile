@@ -1,50 +1,50 @@
 Vagrant.configure("2") do |config|
-  config.vm.define "log" do |log|
-    log.vm.box = "geerlingguy/centos7"
-    log.vm.hostname = "log-sandbox.internal.lan"
+  config.vm.define "box1" do |box1|
+    box1.vm.box = "geerlingguy/centos7"
+    box1.vm.hostname = "box1-sandbox.internal.lan"
 
-    log.vm.synced_folder "log/src/", "/opt/src", create: true
+    box1.vm.synced_folder "box1/src/", "/opt/src", create: true
   
-    log.vm.network :private_network, ip: "192.169.100.73"
+    box1.vm.network :private_network, ip: "192.169.100.73"
 
-    log.vm.provider :virtualbox do |v|
+    box1.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--memory", 1024]
-      v.customize ["modifyvm", :id, "--name", "log"]
+      v.customize ["modifyvm", :id, "--name", "box1"]
     end
   end
 
-config.vm.define "splunk" do |splunk|
-    splunk.vm.box = "geerlingguy/centos7"
-    splunk.vm.hostname = 'splunk-sandbox.internal.lan'
+config.vm.define "box2" do |box2|
+    box2.vm.box = "geerlingguy/centos7"
+    box2.vm.hostname = 'box2-sandbox.internal.lan'
 
-    splunk.vm.synced_folder "splunk/src", "/opt/src", create: true
+    box2.vm.synced_folder "box2/src", "/opt/src", create: true
 
-    splunk.vm.network :private_network, ip: "192.169.100.75"
-    splunk.vm.network "forwarded_port", guest:8080, host:8080
-    splunk.vm.network "forwarded_port", guest:8000, host:8000
+    box2.vm.network :private_network, ip: "192.169.100.75"
+    box2.vm.network "forwarded_port", guest:8080, host:8080
+    box2.vm.network "forwarded_port", guest:8000, host:8000
 
-    splunk.vm.provider :virtualbox do |v|
+    box2.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--memory", 2048]
       v.customize ["modifyvm", :id, "--cpus", 2]
-      v.customize ["modifyvm", :id, "--name", "splunk"]
+      v.customize ["modifyvm", :id, "--name", "box2"]
     end
   end
 
 
-  config.vm.define "statsd" do |statsd|
-    statsd.vm.box = "geerlingguy/centos7"
-    statsd.vm.hostname = 'statsd-standbox.internal.lan'
+  config.vm.define "box3" do |box3|
+    box3.vm.box = "geerlingguy/centos7"
+    box3.vm.hostname = 'box3-standbox.internal.lan'
 
-    statsd.vm.synced_folder "statsd/src/", "/opt/src", create: true
+    box3.vm.synced_folder "box3/src/", "/opt/src", create: true
     
-    statsd.vm.network :private_network, ip: "192.169.100.74"
+    box3.vm.network :private_network, ip: "192.169.100.74"
 
-    statsd.vm.provider :virtualbox do |v|
+    box3.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--memory", 1024]
-      v.customize ["modifyvm", :id, "--name", "statsd"]
+      v.customize ["modifyvm", :id, "--name", "box3"]
     end
   end
 end
