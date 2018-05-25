@@ -1,0 +1,24 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "gobox" do |gobox|
+    gobox.vm.box = "geerlingguy/centos7"
+    gobox.vm.hostname = "gobox.internal.lan"
+    gobox.vm.network :private_network, ip: "192.169.100.73"
+    gobox.vm.synced_folder "src/", "/opt/src", create: true
+
+    gobox.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--name", "gobox"]
+    end
+    
+    gobox.vm.provision "ansible_local" do |ansible|
+       ansible.install_mode = "pip"
+       ansible.version = "latest"
+       ansible.playbook = "/opt/src/playbook.yml"
+       ansible.galaxy_role_file = "/opt/src/requirements.yml"
+       ansible.limit = "all,localhost"
+       
+    end
+  end
+
+end
