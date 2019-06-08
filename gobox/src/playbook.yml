@@ -16,5 +16,9 @@
     - copy: remote_src=yes src=/root/go/bin/gb-vendor dest=/usr/local/bin mode=o+rx
     - name: Cleaning up binaries after copy
       file: path=/root/go state=absent
+    - name: Add another go bin dir to system-wide $PATH.
+      copy:
+        dest: /etc/profile.d/go-path.sh
+        content: 'PATH=$PATH:/usr/local/go/bin'
 
       
