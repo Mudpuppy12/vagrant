@@ -1,0 +1,28 @@
+---
+- hosts: localhost 
+  connection: local
+  become: yes
+  roles:
+        - fubarhouse.golang
+        - geerlingguy.docker
+  vars:
+    docker_users:
+        - vagrant
+  tasks:
+    - name: Installing git
+      package:
+         name: git
+         state: present
+    - name: Compiling gb 
+      command: /usr/local/go/bin/go get github.com/constabulary/gb/...
+    - name: Copying gb binaries to /usr/local/bin
+      copy: remote_src=yes src=/root/go/bin/gb dest=/usr/local/bin mode=o+rx
+    - copy: remote_src=yes src=/root/go/bin/gb-vendor dest=/usr/local/bin mode=o+rx
+    - name: Cleaning up binaries after copy
+      file: path=/root/go state=absent
+    - name: Add another go bin dir to system-wide $PATH.
+      copy:
+        dest: /etc/profile.d/go-path.sh
+        content: 'PATH=$PATH:/usr/local/go/bin'
+
+      
