@@ -5,9 +5,16 @@
   roles:
         - fubarhouse.golang
         - geerlingguy.docker
+        - weareinteractive.users_oh_my_zsh
+
   vars:
     docker_users:
         - vagrant
+    users:
+      - name: vagrant
+        username: vagrant
+        oh_my_zsh:
+          theme: gnzh
   tasks:
     - name: Installing git
       package:
