@@ -31,5 +31,20 @@
       copy:
         dest: /etc/profile.d/go-path.sh
         content: 'PATH=$PATH:/usr/local/go/bin'
+    - name: Clone the pretty zsh powerlevel 10
+      git:
+        repo: https://github.com/romkatv/powerlevel10k.git
+        dest: /home/vagrant/.oh-my-zsh/custom/themes/powerlevel10k
+    - name: Instal Openconnect VPN client
+      apt:
+        name: openconnect
+        state: present
+        
+        
 
-      
+ ## Not sure if I want to automatically setup powerlevel theme, there
+ ## are a lot of questions, but I'll just comment here on adding it
+ ## from the defauly gnzh theme
+ #
+ ## Then edit your ~/.zshrc and set ZSH_THEME="powerlevel10k/powerlevel10k".
+ ## Also add the following: POWERLEVEL9K_MODE="awesome-patched"     
