@@ -35,9 +35,13 @@
       git:
         repo: https://github.com/romkatv/powerlevel10k.git
         dest: /home/vagrant/.oh-my-zsh/custom/themes/powerlevel10k
-    - name: Instal Openconnect VPN client
+    - name: Install Openconnect VPN client
       apt:
         name: openconnect
+        state: present
+    - name: Install pass for password management
+      apt:
+        name: pass
         state: present
         
         
